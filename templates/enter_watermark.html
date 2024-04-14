@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>输入水印文本</title>
+</head>
+<body>
+    <h1>输入水印文本</h1>
+    <form action="/apply_watermark" method="post">
+        <input type="hidden" name="filename" value="{{ filename }}">
+        <input type="text" name="watermark" placeholder="Enter watermark text">
+        <input type="submit" value="应用水印">
+    </form>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>水印提取结果</title>
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="mb-3">水印提取结果</h1>
+
+        <!-- 检查 watermark 变量是否存在且不为空 -->
+        {% if watermark %}
+            <div class="alert alert-success" role="alert">
+                <h4 class="alert-heading">提取的水印:</h4>
+                <p>{{ watermark }}</p>
+            </div>
+        {% else %}
+            <div class="alert alert-warning" role="alert">
+                <p>无法从图片中提取水印。</p>
+            </div>
+        {% endif %}
+
+        <!-- 提供下载或查看带有水印的图片的链接 -->
+        <a href="{{ url_for('download_file', filename=filename) }}" class="btn btn-primary" download>
+       下载带水印的图片
+        </a>
+
+        <!-- 返回主页的链接 -->
+        <a href="{{ url_for('index') }}" class="btn btn-secondary">
+            返回
+        </a>
+    </div>
+
+    <!-- 可选的JavaScript -->
+    <!-- 首先是 jQuery，然后是 Popper.js，然后是 Bootstrap JS -->
+    <script src="https://cdn.staticfile.org/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

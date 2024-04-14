@@ -1,0 +1,19 @@
+<!-- templates/watermark_success.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Watermark Application Success</title>
+</head>
+<body>
+    <h1>Watermark Application Success</h1>
+    <p>水印应用成功，文件保存在: {{ output_path }}</p>
+
+    <!-- 这里添加一个按钮或链接，让用户可以提取水印 -->
+    <form action="{{ url_for('watermark_extraction') }}" method="post">
+        <input type="hidden" name="filename" value="{{ filename }}">
+        <input type="submit" value="提取水印文本">
+    </form>
+</body>
+</html>
