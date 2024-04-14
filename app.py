@@ -2,7 +2,6 @@ from flask import Flask, render_template, request, redirect, url_for
 
 import os
 
-from werkzeug.utils import secure_filename
 
 from imageEmbeddedWatermark import embed_watermark
 from imageExtractionWatermark import extract_watermark
@@ -56,6 +55,12 @@ def apply_watermark():
     embed_watermark(input_path, output_path, watermark_text)
     original_image_url = url_for('static', filename='uploads/' + filename)
     watermarked_image_url = url_for('static', filename='output/' + output_filename)
+
+    len_wm = embed_watermark(input_path, output_path, watermark_text)
+    # 将水印长度写入配置文件
+    config_path = os.path.join(app.config['OUTPUT_FOLDER'], 'watermark_length.txt')
+    with open(config_path, 'w') as f:
+        f.write(str(len_wm))
 
     return render_template('watermark_success.html',
                            original_image_url=original_image_url,
