@@ -1,19 +1,115 @@
-<!-- templates/watermark_success.html -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Watermark Application Success</title>
+    <style>
+    /* 添加到 <head> 中的现有 <style> 标签内 */
+    .images-container {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        flex-wrap: wrap; /* 在需要的情况下允许换行 */
+        margin-bottom: 20px; /* 添加一些底部外边距 */
+    }
+    .image-box {
+        width: 48%; /* 适当的宽度以便两个图片并列 */
+        margin: 1%; /* 添加一些边距 */
+    }
+    img {
+        max-width: 100%; /* 图片最大宽度为100%，这样它们就不会超出其容器 */
+        height: auto; /* 高度自动 */
+    }
+    /* 响应式设计：在较小的屏幕上堆叠图片 */
+    @media (max-width: 768px) {
+        .image-box {
+            width: 100%; /* 较小屏幕上宽度为100% */
+        }
+    }
+</style>
+
+    <title>Watermark Comparison</title>
+    <!-- 确保添加了适当的响应式viewport标签 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 添加一些内联CSS样式来设置图片并列显示 -->
+    <style>
+        .images-container {
+            display: flex; /* 设置flex布局 */
+            justify-content: space-around; /* 图片间有空间 */
+            align-items: center; /* 垂直居中 */
+            padding: 20px; /* 一些内边距 */
+        }
+        .image-box {
+            flex-basis: 48%; /* 每个图片盒子占据容器宽度的一半 */
+            text-align: center; /* 文本居中 */
+        }
+        img {
+            max-width: 100%; /* 图片最大宽度为容器的100% */
+            height: auto; /* 高度自动调整 */
+        }
+        /* 在小屏幕设备上调整布局 */
+        @media (max-width: 768px) {
+            .images-container {
+                flex-direction: column; /* 垂直排列图片 */
+            }
+            .image-box {
+                flex-basis: auto; /* 宽度自动 */
+                margin-bottom: 20px; /* 添加底部边距 */
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Watermark Application Success</h1>
-    <p>水印应用成功，文件保存在: {{ output_path }}</p>
+    <div class="images-container">
+        <div class="image-box">
+            <h2>原始图片</h2>
+            <img src="{{ original_image_url }}" alt="Original Image">
+        </div>
+        <div class="image-box">
+            <h2>加水印后的图片</h2>
+            <img src="{{ watermarked_image_url }}" alt="Watermarked Image">
+        </div>
+    </div>
 
-    <!-- 这里添加一个按钮或链接，让用户可以提取水印 -->
-    <form action="{{ url_for('watermark_extraction') }}" method="post">
-        <input type="hidden" name="filename" value="{{ filename }}">
-        <input type="submit" value="提取水印文本">
-    </form>
+<form action="{{ url_for('watermark_extraction') }}" method="post">
+    <input type="hidden" name="filename" value="{{ filename }}">
+    <input type="submit" value="提取水印文本">
+</form>
+
+<a href="{{ url_for('download_file', filename=filename) }}" class="btn btn-primary" download>下载带水印的图片</a>
+<a href="{{ url_for('index') }}" class="btn btn-secondary">返回</a>
 </body>
 </html>
+
+
+
+
+
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Watermark Application Success</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--    <h1>水印添加成功</h1>-->
+
+<!--    &lt;!&ndash; 显示原始图片和加水印后的图片 &ndash;&gt;-->
+<!--    <div>-->
+<!--        <h2>原始图片</h2>-->
+<!--        <img src="{{ original_image_url }}" alt="Original Image">-->
+<!--        <h2>加水印后的图片</h2>-->
+<!--        <img src="{{ watermarked_image_url }}" alt="Watermarked Image">-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; 提取水印表单 &ndash;&gt;-->
+<!--    <form action="{{ url_for('watermark_extraction') }}" method="post">-->
+<!--        <input type="hidden" name="filename" value="{{ filename }}">-->
+<!--        <input type="submit" value="提取水印文本">-->
+<!--    </form>-->
+
+<!--    &lt;!&ndash; 下载链接 &ndash;&gt;-->
+<!--    <a href="{{ url_for('download_file', filename=filename) }}" class="btn btn-primary" download>下载带水印的图片</a>-->
+<!--    <a href="{{ url_for('index') }}" class="btn btn-secondary">返回</a>-->
+<!--</body>-->
+<!--</html>-->

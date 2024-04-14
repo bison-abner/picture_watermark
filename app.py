@@ -2,14 +2,16 @@ from flask import Flask, render_template, request, redirect, url_for
 
 import os
 
+from werkzeug.utils import secure_filename
+
 from imageEmbeddedWatermark import embed_watermark
 from imageExtractionWatermark import extract_watermark
 from flask import send_from_directory
 app = Flask(__name__)
 
 
-UPLOAD_FOLDER = 'uploads'
-OUTPUT_FOLDER = 'output'
+UPLOAD_FOLDER = 'static/uploads'
+OUTPUT_FOLDER = 'static/output'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['OUTPUT_FOLDER'] = OUTPUT_FOLDER
 
@@ -41,56 +43,24 @@ def enter_watermark(filename):
     # 显示水印文本输入表单的页面
     return render_template('enter_watermark.html', filename=filename)
 
-
-# @app.route('/apply_watermark', methods=['POST'])
-# def apply_watermark():
-#     # 从请求中获取上传的文件对象
-#     file = request.files['file']
-#     # 从请求中获取水印文本
-#     watermark_text = request.form['watermark']
-#
-#     # 保存原始文件
-#     original_filename = secure_filename(file.filename)
-#     input_path = os.path.join(app.config['UPLOAD_FOLDER'], original_filename)
-#     file.save(input_path)
-#
-#     # 构建输出图片的路径
-#     output_filename = "wm_" + original_filename
-#     output_path = os.path.join(app.config['OUTPUT_FOLDER'], output_filename)
-#
-#     # 调用 embed_watermark 函数并传入用户指定的水印文本
-#     embed_watermark(input_path, watermark_text)  # 假设此函数现在只需要两个参数
-#
-#     # 生成图片的URL以在HTML中展示
-#     original_image_url = url_for('static', filename='uploads/' + original_filename)
-#     watermarked_image_url = url_for('static', filename='output/' + output_filename)
-#
-#     # 操作完成后，渲染一个包含成功消息和图片展示的新页面
-#     return render_template('watermark_success.html',
-#                            original_image_url=original_image_url,
-#                            watermarked_image_url=watermarked_image_url)
 @app.route('/apply_watermark', methods=['POST'])
 def apply_watermark():
-    # 从表单中获取文件名和水印文本
     filename = request.form['filename']
     watermark_text = request.form['watermark']
 
-    # 构建输入和输出图片的路径
     input_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
     output_filename = "wm_" + filename
     output_path = os.path.join(app.config['OUTPUT_FOLDER'], output_filename)
 
-    # 调用 embed_watermark 函数并传入用户指定的水印文本
-    # embed_watermark(input_path, output_path, watermark_text)
-    # 调用 embed_watermark 函数并传入用户指定的水印文本
-    len_wm = embed_watermark(input_path, output_path, watermark_text)
-    # 将水印长度写入配置文件
-    config_path = os.path.join(app.config['OUTPUT_FOLDER'], 'watermark_length.txt')
-    with open(config_path, 'w') as f:
-        f.write(str(len_wm))
+    # 嵌入水印
+    embed_watermark(input_path, output_path, watermark_text)
+    original_image_url = url_for('static', filename='uploads/' + filename)
+    watermarked_image_url = url_for('static', filename='output/' + output_filename)
 
-    # 操作完成后，渲染一个包含成功消息和提取水印选项的新页面
-    return render_template('watermark_success.html', output_path=output_path, filename=output_filename)
+    return render_template('watermark_success.html',
+                           original_image_url=original_image_url,
+                           watermarked_image_url=watermarked_image_url,
+                           filename=output_filename)
 
 @app.route('/watermark_extraction', methods=['POST'])
 def watermark_extraction():
